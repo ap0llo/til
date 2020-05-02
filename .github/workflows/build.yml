@@ -18,3 +18,9 @@ jobs:
         ./update-readme.ps1
         cat README.asc
       shell: pwsh
+    - name: Commit and push if README.asc was updated
+      run: |-
+        git diff
+        git config --global user.email "githubactions@example.com"
+        git config --global user.name "GitHub Actions"
+        git diff --quiet || (git add README.asc && git commit -m "Updated README")
