@@ -1,0 +1,15 @@
+# Analyzer Project Reference
+
+A Roslyn Analyzer can be referenced using a `ProjectReference`:
+
+```xml
+...
+<ProjectReference Include=".."
+                  PrivateAssets="all"
+                  ReferenceOutputAssembly="false" 
+                  OutputItemType="Analyzer" /> 
+...
+```
+
+Found on Twitter
+https://twitter.com/Nick_Craver/status/1256365611455840256
