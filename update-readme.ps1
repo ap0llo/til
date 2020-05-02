@@ -27,7 +27,8 @@ foreach($dir in $dirs) {
 
     # Add list of files in the directory
     foreach($file in $files) {
-        "* $($file.Name)" >> README.asc
+        $name = [System.IO.Path]::GetFileNameWithoutExtension($file.Name)
+        "* $name" >> README.asc
     }
 
     "" >> README.asc
