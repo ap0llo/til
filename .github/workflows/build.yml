@@ -13,8 +13,8 @@ jobs:
     steps:
     - name: Check out repo
       uses: actions/checkout@v2
-    - name: Display the path
+    - name: Update README.asc
       run: |-
-        ./update-readme.md
+        ./update-readme.ps1
         cat README.asc
       shell: pwsh
