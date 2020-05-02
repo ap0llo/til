@@ -27,8 +27,16 @@ foreach($dir in $dirs) {
 
     # Add list of files in the directory
     foreach($file in $files) {
+        # Get the date the file was last modified
+        $command = "git log -1 --pretty=`"format:%ci`" `"$($file.FullName)`""
+        $dateString = Invoke-Expression $command
+        if($LASTEXITCODE -ne 0) {
+            throw "Command '$command' failed with exit code $LASTEXITCODE"
+        }
+        $date = [System.DateTime]::Parse($dateString)
+
         $name = [System.IO.Path]::GetFileNameWithoutExtension($file.Name)
-        "* link:$($dir.Name)/$($file.Name)[$name]" >> README.asc
+        "* link:$($dir.Name)/$($file.Name)[$name] - _$($date.ToString("yyyy-MM-dd"))_" >> README.asc
     }
 
     "" >> README.asc
