@@ -14,5 +14,7 @@ jobs:
     - name: Check out repo
       uses: actions/checkout@v2
     - name: Display the path
-      run: echo ${env:PATH}
+      run: |-
+        ./update-readme.md
+        cat README.asc
       shell: pwsh
