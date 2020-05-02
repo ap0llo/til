@@ -11,11 +11,11 @@ foreach($dir in $dirs) {
     $files = Get-ChildItem -Path $dir.FullName -Filter *.asc | Sort-Object -Property Name
 
     $count = ($files | Measure-Object).Count
-    if($found -eq 0) {
+    if($count -eq 0) {
         continue
     }
 
-    "= $($dir.Name)" >> README.asc
+    "== $($dir.Name)" >> README.asc
     "" >> README.asc
 
     foreach($file in $files) {
