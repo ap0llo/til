@@ -27,14 +27,26 @@ foreach($dir in $dirs) {
 
     # Add list of files in the directory
     foreach($file in $files) {
+
         # Get the date the file was last modified
         $command = "git log -1 --pretty=`"format:%cs`" `"$($file.FullName)`""
         $date = Invoke-Expression $command
         if($LASTEXITCODE -ne 0) {
             throw "Command '$command' failed with exit code $LASTEXITCODE"
         }
-        $name = [System.IO.Path]::GetFileNameWithoutExtension($file.Name)
-        "* link:$($dir.Name)/$($file.Name)[$name] - _$($date)_" >> README.asc
+        
+        # Get the title from the file (the heading starts with "= ")
+        # Use the file name if no title is found
+        $title = [System.IO.Path]::GetFileNameWithoutExtension($file.Name)
+        foreach($line in (Get-Content -Path $file.FullName)) { 
+            $line = $line.Trim()
+            if($line.StartsWith("= ")) {
+                $title = $line.Substring(2).Trim()
+                break
+            }
+        }
+                
+        "* link:$($dir.Name)/$($file.Name)[$title] - _$($date)_" >> README.asc
     }
 
     "" >> README.asc
