@@ -21,8 +21,21 @@ foreach ($dir in $dirs) {
         continue
     }
 
-    # Use directory name as header
-    "== $($dir.Name)" >> README.asc
+    # Determine the header of the section
+    # By default, use the directory name
+    $header = $dir.Name
+
+    # If there is a directory.json file in the directory
+    # load the header from there
+    $dirInfoPath = Join-Path $dir.FullName "directory.json"
+    if (Test-Path $dirInfoPath) {
+        $directoryInfo = Get-Content -Path $dirInfoPath -Raw | ConvertFrom-Json
+        if ($directoryInfo.title) {
+            $header = $directoryInfo.title 
+        }
+    }
+
+    "== $header" >> README.asc
     "" >> README.asc
 
     # Add list of files in the directory
