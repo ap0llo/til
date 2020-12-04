@@ -134,7 +134,12 @@ record ArticleInfo(string Path, string Title, DateTime ModifiedDate)
             : title;
 
 
-        var modifiedDate = Util.GetGitModificationDate(path);
+        var revDate = lines.FirstOrDefault(x => x.Trim().StartsWith(":revdate:"))?.Remove(0, ":revdate:".Length)?.Trim();
+        if(!DateTime.TryParseExact(revDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var modifiedDate))
+        {
+            modifiedDate = Util.GetGitModificationDate(path);
+        }
+
         return new ArticleInfo(Path: path, Title: title, ModifiedDate: modifiedDate);
     }
 }
