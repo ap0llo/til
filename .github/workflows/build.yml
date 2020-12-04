@@ -1,4 +1,4 @@
-name: Update README 
+name: Update README
 
 on:
   push:
@@ -11,15 +11,29 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+
+    - name: Set Environment Variables
+      run: |-
+        echo "DOTNET_CLI_TELEMETRY_OPTOUT=1" >> $GITHUB_ENV
+        echo "DOTNET_NOLOGO=1" >> $GITHUB_ENV
+        echo "DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1" >> $GITHUB_ENV
+
     - name: Check out repo
       uses: actions/checkout@v2
       with:
         fetch-depth: 0
+
+    - name: Install .NET SDK
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '5.0.100'
+
     - name: Update README.asc
       run: |-
-        ./update-readme.ps1
+        dotnet run --project .build/build.csproj -- . ./README.asc
         cat README.asc
       shell: pwsh
+
     - name: Commit and push if README.asc was updated
       run: |-
         git diff
